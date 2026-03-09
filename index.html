@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UniMart — UNIPORT's Official Campus Marketplace</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET & TOKENS ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+:root {
+  --g-dark:   #071a0c;
+  --g-deep:   #0c2e14;
+  --g-mid:    #0d4a1f;
+  --g-bright: #1d7a35;
+  --y:        #f5b800;
+  --y-light:  #ffd740;
+  --cream:    #fdf7e8;
+  --white:    #ffffff;
+  --muted:    rgba(255,255,255,0.55);
+  --border:   rgba(255,255,255,0.09);
+  --radius:   18px;
+}
+
+body {
+  font-family:'DM Sans',sans-serif;
+  background:var(--g-dark);
+  color:var(--white);
+  overflow-x:hidden;
+  cursor:default;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:0.4;
+}
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1rem 2rem;
+  background:rgba(7,26,12,0.82);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.logo { display:flex; align-items:center; gap:.7rem; text-decoration:none; }
+.logo-mark {
+  width:40px; height:40px; border-radius:11px;
+  background:var(--y); display:flex; align-items:center; justify-content:center;
+  font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:var(--g-dark);
+  box-shadow:0 0 22px rgba(245,184,0,.45);
+}
+.logo-name { font-family:'Syne',sans-serif; font-weight:700; font-size:1.3rem; }
+.nav-pill {
+  display:flex; align-items:center; gap:.5rem;
+  background:rgba(245,184,0,.12); border:1px solid rgba(245,184,0,.3);
+  color:var(--y); font-size:.8rem; font-weight:600;
+  padding:.4rem 1rem; border-radius:50px;
+  letter-spacing:.05em; text-transform:uppercase;
+}
+.nav-dot { width:7px; height:7px; border-radius:50%; background:var(--y); animation:blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* ── HERO ── */
+.hero {
+  min-height:100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:8rem 1.5rem 5rem;
+  position:relative; overflow:hidden;
+}
+
+/* animated gradient orbs */
+.orb {
+  position:absolute; border-radius:50%; filter:blur(80px);
+  pointer-events:none; z-index:0;
+}
+.orb-1 { width:600px; height:600px; background:radial-gradient(circle,rgba(29,122,53,.35),transparent 70%); top:-15%; left:50%; transform:translateX(-50%); animation:drift1 10s ease-in-out infinite; }
+.orb-2 { width:350px; height:350px; background:radial-gradient(circle,rgba(245,184,0,.1),transparent 70%); bottom:10%; right:-5%; animation:drift2 13s ease-in-out infinite; }
+.orb-3 { width:280px; height:280px; background:radial-gradient(circle,rgba(13,74,31,.5),transparent 70%); top:30%; left:-8%; animation:drift3 11s ease-in-out infinite; }
+@keyframes drift1 { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-48%) translateY(-30px)} }
+@keyframes drift2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
+@keyframes drift3 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(25px)} }
+
+/* grid pattern */
+.hero-grid {
+  position:absolute; inset:0; z-index:0;
+  background-image:linear-gradient(rgba(29,122,53,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(29,122,53,.06) 1px,transparent 1px);
+  background-size:55px 55px;
+}
+
+.hero-content { position:relative; z-index:2; }
+
+.coming-badge {
+  display:inline-flex; align-items:center; gap:.6rem;
+  background:rgba(245,184,0,.1); border:1px solid rgba(245,184,0,.35);
+  color:var(--y); font-size:.78rem; font-weight:700;
+  padding:.45rem 1.1rem; border-radius:50px;
+  margin-bottom:2rem; letter-spacing:.07em; text-transform:uppercase;
+  animation:fadeUp .6s ease both;
+}
+
+.hero h1 {
+  font-family:'Syne',sans-serif; font-weight:800;
+  font-size:clamp(2.6rem,9vw,6rem);
+  line-height:1.02; margin-bottom:1rem;
+  animation:fadeUp .7s .1s ease both;
+}
+.hero h1 em { font-style:normal; color:var(--y); display:block; }
+
+.hero-sub {
+  max-width:520px; margin:0 auto 2.5rem;
+  font-size:clamp(.95rem,2.5vw,1.1rem); color:var(--muted); line-height:1.75;
+  animation:fadeUp .7s .2s ease both;
+}
+
+/* ── WAITLIST FORM ── */
+.waitlist-wrap {
+  position:relative; z-index:2;
+  animation:fadeUp .7s .3s ease both;
+  margin-bottom:1.5rem;
+}
+
+.tab-row {
+  display:inline-flex; gap:0;
+  background:rgba(255,255,255,.06); border:1px solid var(--border);
+  border-radius:50px; padding:4px; margin-bottom:1.2rem;
+}
+.tab-btn {
+  font-family:'DM Sans',sans-serif; font-weight:600; font-size:.85rem;
+  padding:.5rem 1.4rem; border-radius:50px; border:none; cursor:pointer;
+  transition:all .25s; background:transparent; color:var(--muted);
+}
+.tab-btn.active { background:var(--y); color:var(--g-dark); }
+
+.form-row {
+  display:flex; gap:.6rem; flex-wrap:wrap; justify-content:center;
+  max-width:520px; margin:0 auto;
+}
+.form-row input {
+  flex:1; min-width:200px;
+  background:rgba(255,255,255,.07); border:1px solid var(--border);
+  color:var(--white); font-family:'DM Sans',sans-serif; font-size:.95rem;
+  padding:.85rem 1.2rem; border-radius:50px; outline:none;
+  transition:border-color .2s, background .2s;
+}
+.form-row input::placeholder { color:rgba(255,255,255,.35); }
+.form-row input:focus { border-color:rgba(245,184,0,.5); background:rgba(255,255,255,.1); }
+
+.join-btn {
+  background:var(--y); color:var(--g-dark);
+  font-family:'Syne',sans-serif; font-weight:700; font-size:.95rem;
+  padding:.85rem 1.8rem; border-radius:50px; border:none; cursor:pointer;
+  white-space:nowrap; transition:all .25s;
+  box-shadow:0 6px 24px rgba(245,184,0,.35);
+  display:flex; align-items:center; gap:.4rem;
+}
+.join-btn:hover { background:var(--y-light); transform:translateY(-2px); box-shadow:0 10px 32px rgba(245,184,0,.5); }
+.join-btn:active { transform:translateY(0); }
+
+/* success state */
+.success-msg {
+  display:none; flex-direction:column; align-items:center; gap:.6rem;
+  animation:popIn .4s ease both;
+}
+.success-icon {
+  width:56px; height:56px; border-radius:50%;
+  background:rgba(29,122,53,.3); border:2px solid var(--g-bright);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.5rem;
+}
+.success-text { font-family:'Syne',sans-serif; font-weight:700; font-size:1.1rem; }
+.success-sub { color:var(--muted); font-size:.88rem; }
+
+@keyframes popIn { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+
+/* counter pill */
+.counter-pill {
+  display:inline-flex; align-items:center; gap:.5rem;
+  color:var(--muted); font-size:.82rem; margin-top:.8rem;
+}
+.counter-num { font-family:'Syne',sans-serif; font-weight:700; color:var(--y); font-size:1rem; }
+
+/* ── FLOATING CARDS ── */
+.floaters { position:absolute; inset:0; z-index:1; pointer-events:none; }
+.fcard {
+  position:absolute;
+  background:rgba(255,255,255,.06); backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.13); border-radius:14px;
+  padding:.8rem 1.1rem; font-size:.78rem;
+  display:flex; align-items:center; gap:.5rem;
+  animation:floatUD 5s ease-in-out infinite;
+}
+.fcard-1 { top:22%; left:4%; animation-delay:0s; }
+.fcard-2 { top:40%; right:4%; animation-delay:1.8s; }
+.fcard-3 { bottom:22%; left:7%; animation-delay:.9s; }
+.fcard-4 { bottom:30%; right:6%; animation-delay:2.5s; }
+.fcard span { color:var(--y); font-weight:700; }
+@keyframes floatUD { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@media(max-width:900px){.fcard{display:none}}
+
+/* ── STATS ── */
+.stats-row {
+  position:relative; z-index:2;
+  display:flex; justify-content:center; flex-wrap:wrap; gap:0;
+  max-width:580px; margin:0 auto;
+  background:rgba(255,255,255,.04); border:1px solid var(--border);
+  border-radius:20px; overflow:hidden;
+  animation:fadeUp .7s .4s ease both;
+}
+.stat { flex:1; min-width:120px; padding:1.1rem 1.2rem; text-align:center; border-right:1px solid var(--border); }
+.stat:last-child { border-right:none; }
+.stat-n { font-family:'Syne',sans-serif; font-weight:800; font-size:1.55rem; color:var(--y); }
+.stat-l { font-size:.7rem; color:var(--muted); margin-top:.2rem; text-transform:uppercase; letter-spacing:.05em; }
+
+/* ── SECTION SHARED ── */
+.section { padding:5rem 1.5rem; position:relative; z-index:1; }
+.inner { max-width:1100px; margin:0 auto; }
+.sec-label { display:inline-block; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--y); margin-bottom:.6rem; }
+.sec-title { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(1.8rem,5vw,2.9rem); line-height:1.1; margin-bottom:.8rem; }
+.sec-sub { color:var(--muted); font-size:1rem; line-height:1.7; max-width:480px; }
+
+/* divider */
+.divider { height:1px; background:linear-gradient(90deg,transparent,var(--border) 30%,var(--border) 70%,transparent); margin:0 1.5rem; }
+
+/* ── CATEGORIES ── */
+.cats-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:.9rem; margin-top:2.5rem;
+}
+.cat {
+  background:rgba(255,255,255,.03); border:1px solid var(--border);
+  border-radius:var(--radius); padding:1.4rem 1rem; text-align:center;
+  cursor:pointer; transition:all .25s; position:relative; overflow:hidden;
+}
+.cat::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(245,184,0,.07),transparent);
+  opacity:0; transition:opacity .25s;
+}
+.cat:hover { border-color:rgba(245,184,0,.4); transform:translateY(-4px); box-shadow:0 10px 28px rgba(0,0,0,.3); }
+.cat:hover::after { opacity:1; }
+.cat:hover .cat-em { transform:scale(1.2) rotate(-5deg); }
+.cat-em { font-size:2rem; display:block; margin-bottom:.6rem; transition:transform .3s; }
+.cat-name { font-family:'Syne',sans-serif; font-weight:700; font-size:.82rem; }
+.cat-tag { font-size:.68rem; color:var(--y); margin-top:.2rem; }
+
+/* ── HOW IT WORKS ── */
+.how-bg { background:rgba(255,255,255,.015); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:1.5rem; margin-top:2.5rem; }
+.step {
+  background:rgba(255,255,255,.03); border:1px solid var(--border);
+  border-radius:var(--radius); padding:2rem 1.5rem; position:relative; overflow:hidden;
+  transition:all .25s;
+}
+.step:hover { border-color:rgba(245,184,0,.25); transform:translateY(-3px); }
+.step-ghost {
+  position:absolute; top:-.2rem; right:.8rem;
+  font-family:'Syne',sans-serif; font-weight:800; font-size:4.5rem;
+  color:rgba(245,184,0,.07); line-height:1; pointer-events:none;
+}
+.step-ico {
+  width:48px; height:48px; border-radius:13px;
+  background:rgba(245,184,0,.1); border:1px solid rgba(245,184,0,.2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.4rem; margin-bottom:1rem;
+}
+.step-t { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; margin-bottom:.5rem; }
+.step-d { font-size:.86rem; color:var(--muted); line-height:1.65; }
+
+/* ── SELLER BOX ── */
+.seller-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center;
+  background:linear-gradient(135deg,rgba(13,74,31,.85),rgba(29,122,53,.5));
+  border:1px solid rgba(245,184,0,.2); border-radius:26px;
+  padding:3.5rem 3rem; position:relative; overflow:hidden;
+  margin-top:0;
+}
+.seller-grid::before {
+  content:''; position:absolute; top:-40%; right:-15%;
+  width:420px; height:420px; border-radius:50%;
+  background:radial-gradient(circle,rgba(245,184,0,.07),transparent 65%);
+  pointer-events:none;
+}
+.s-badge {
+  display:inline-block; background:rgba(245,184,0,.15); border:1px solid rgba(245,184,0,.3);
+  color:var(--y); font-size:.72rem; font-weight:700;
+  padding:.3rem .9rem; border-radius:50px; margin-bottom:1rem;
+  text-transform:uppercase; letter-spacing:.08em;
+}
+.seller-grid h2 { font-family:'Syne',sans-serif; font-weight:800; font-size:2rem; line-height:1.15; margin-bottom:.8rem; }
+.seller-grid p { color:rgba(255,255,255,.7); line-height:1.7; font-size:.92rem; margin-bottom:1.2rem; }
+.price-block {
+  display:inline-flex; align-items:baseline; gap:.3rem;
+  background:var(--y); color:var(--g-dark); padding:.7rem 1.4rem;
+  border-radius:12px; margin-bottom:1.2rem;
+}
+.price-big { font-family:'Syne',sans-serif; font-weight:800; font-size:2.1rem; }
+.price-sm { font-size:.8rem; font-weight:600; }
+.perks { list-style:none; display:flex; flex-direction:column; gap:.6rem; }
+.perk { display:flex; align-items:flex-start; gap:.7rem; font-size:.88rem; color:rgba(255,255,255,.8); }
+.perk-dot {
+  width:20px; height:20px; border-radius:50%; flex-shrink:0; margin-top:.1rem;
+  background:rgba(245,184,0,.15); border:1px solid rgba(245,184,0,.3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.65rem; color:var(--y);
+}
+
+/* ── FEATURES ── */
+.feats { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.3rem; margin-top:2.5rem; }
+.feat {
+  background:rgba(255,255,255,.03); border:1px solid var(--border);
+  border-radius:var(--radius); padding:1.8rem; transition:all .25s;
+}
+.feat:hover { border-color:rgba(245,184,0,.22); background:rgba(255,255,255,.05); }
+.feat-ico {
+  width:50px; height:50px; border-radius:14px;
+  background:rgba(245,184,0,.09); border:1px solid rgba(245,184,0,.18);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.5rem; margin-bottom:1.1rem;
+}
+.feat-t { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; margin-bottom:.5rem; }
+.feat-d { font-size:.86rem; color:var(--muted); line-height:1.65; }
+
+/* ── SECOND WAITLIST CTA ── */
+.cta-box {
+  background:linear-gradient(135deg,var(--g-mid),var(--g-deep));
+  border:1px solid rgba(245,184,0,.2); border-radius:26px;
+  padding:4rem 2rem; text-align:center; position:relative; overflow:hidden;
+}
+.cta-box::before {
+  content:''; position:absolute; top:-50%; left:50%; transform:translateX(-50%);
+  width:600px; height:400px; border-radius:50%;
+  background:radial-gradient(circle,rgba(245,184,0,.08),transparent 60%);
+  pointer-events:none;
+}
+.cta-box h2 { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(1.6rem,4vw,2.6rem); margin-bottom:.8rem; }
+.cta-box p { color:var(--muted); font-size:1rem; max-width:460px; margin:0 auto 2rem; line-height:1.7; }
+
+/* ── FOOTER ── */
+footer { padding:3rem 1.5rem; border-top:1px solid var(--border); text-align:center; position:relative; z-index:1; }
+.foot-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; margin-bottom:.3rem; }
+.foot-logo span { color:var(--y); }
+.foot-sub { color:var(--muted); font-size:.82rem; margin-bottom:1.8rem; }
+.foot-links { display:flex; flex-wrap:wrap; justify-content:center; gap:1.3rem; list-style:none; margin-bottom:1.5rem; }
+.foot-links a { color:rgba(255,255,255,.4); font-size:.82rem; text-decoration:none; transition:color .2s; }
+.foot-links a:hover { color:var(--y); }
+.foot-copy { font-size:.75rem; color:rgba(255,255,255,.2); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .65s ease,transform .65s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ── MOBILE ── */
+@media(max-width:700px){
+  .seller-grid { grid-template-columns:1fr; padding:2.2rem 1.5rem; }
+  .seller-grid::before { display:none; }
+  .logo-name { display:none; }
+  nav { padding:.9rem 1rem; }
+}
+
+/* ── MODAL ── */
+.modal-overlay {
+  display:none; position:fixed; inset:0; z-index:500;
+  background:rgba(0,0,0,.7); backdrop-filter:blur(8px);
+  align-items:center; justify-content:center; padding:1.5rem;
+}
+.modal-overlay.open { display:flex; animation:fadeIn .3s ease; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.modal {
+  background:var(--g-deep); border:1px solid rgba(245,184,0,.25);
+  border-radius:24px; padding:2.5rem; max-width:440px; width:100%;
+  animation:slideUp .35s ease both;
+  position:relative;
+}
+@keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+.modal-close {
+  position:absolute; top:1rem; right:1rem;
+  background:rgba(255,255,255,.08); border:none; color:var(--white);
+  width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:1rem;
+  display:flex; align-items:center; justify-content:center; transition:background .2s;
+}
+.modal-close:hover { background:rgba(255,255,255,.15); }
+.modal h3 { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; margin-bottom:.4rem; }
+.modal p { color:var(--muted); font-size:.88rem; margin-bottom:1.4rem; line-height:1.6; }
+.modal-form { display:flex; flex-direction:column; gap:.7rem; }
+.modal-form input, .modal-form select {
+  background:rgba(255,255,255,.07); border:1px solid var(--border);
+  color:var(--white); font-family:'DM Sans',sans-serif; font-size:.9rem;
+  padding:.8rem 1.1rem; border-radius:12px; outline:none; transition:border-color .2s;
+  width:100%;
+}
+.modal-form input::placeholder { color:rgba(255,255,255,.3); }
+.modal-form input:focus, .modal-form select:focus { border-color:rgba(245,184,0,.5); }
+.modal-form select option { background:var(--g-deep); }
+.modal-submit {
+  background:var(--y); color:var(--g-dark);
+  font-family:'Syne',sans-serif; font-weight:700; font-size:.95rem;
+  padding:.85rem; border-radius:12px; border:none; cursor:pointer;
+  transition:all .2s; margin-top:.3rem;
+}
+.modal-submit:hover { background:var(--y-light); }
+
+/* ── TIER PRICING ── */
+.slot-ticker {
+  display:inline-flex; align-items:center; gap:.6rem;
+  background:rgba(245,184,0,.08); border:1px solid rgba(245,184,0,.2);
+  padding:.5rem 1.2rem; border-radius:50px; font-size:.82rem;
+  color:rgba(255,255,255,.75); margin-bottom:2rem;
+}
+.slot-dot { width:8px; height:8px; border-radius:50%; background:var(--y); animation:blink 1.5s infinite; flex-shrink:0; }
+.tiers-wrap { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; align-items:start; }
+@media(max-width:800px){ .tiers-wrap { grid-template-columns:1fr; } }
+.tier { border-radius:22px; padding:2rem 1.6rem; display:flex; flex-direction:column; gap:.7rem; position:relative; overflow:hidden; }
+.tier-founder { background:linear-gradient(145deg,rgba(13,74,31,.9),rgba(7,26,12,.95)); border:1px solid rgba(245,184,0,.4); box-shadow:0 0 40px rgba(245,184,0,.12); }
+.tier-early { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1); }
+.tier-regular { background:rgba(255,255,255,.015); border:1px solid rgba(255,255,255,.06); }
+.tier-emoji { font-size:2rem; }
+.tier-badge-top { display:inline-block; background:rgba(245,184,0,.15); color:var(--y); font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:.25rem .8rem; border-radius:50px; width:fit-content; }
+.tier-name { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; color:var(--y); }
+.tier-slots-row { font-size:.82rem; color:rgba(245,184,0,.8); font-weight:600; }
+.tier-slots-left { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; color:var(--y); }
+.tier-price-old { font-size:.88rem; color:rgba(255,255,255,.35); text-decoration:line-through; }
+.tier-price-new { font-family:'Syne',sans-serif; font-weight:800; font-size:2.2rem; color:var(--y); line-height:1; }
+.tier-price-new small { font-size:.9rem; font-weight:500; }
+.tier-save-tag { display:inline-block; background:rgba(245,184,0,.15); color:var(--y); font-size:.75rem; font-weight:700; padding:.3rem .9rem; border-radius:50px; width:fit-content; }
+.tier-perks { list-style:none; display:flex; flex-direction:column; gap:.4rem; color:rgba(255,255,255,.8); font-size:.84rem; padding:0; }
+.tier-perks li { display:flex; align-items:flex-start; gap:.4rem; }
+.tier-bar-wrap { background:rgba(245,184,0,.12); border-radius:50px; height:5px; overflow:hidden; }
+.tier-bar { height:100%; border-radius:50px; background:var(--y); transition:width .6s ease; }
+.tier-btn { font-family:'Syne',sans-serif; font-weight:700; font-size:.9rem; padding:.85rem 1.2rem; border-radius:12px; border:none; cursor:pointer; transition:all .2s; text-align:center; }
+.tier-btn-gold { background:var(--y); color:var(--g-dark); box-shadow:0 6px 20px rgba(245,184,0,.35); }
+.tier-btn-gold:hover { background:var(--y-light); transform:translateY(-2px); }
+.modal-tier-badge { display:inline-flex; align-items:center; gap:.5rem; padding:.4rem 1rem; border-radius:50px; font-size:.8rem; font-weight:700; margin-bottom:.8rem; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-mark">U</div>
+    <span class="logo-name">UniMart</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:.8rem;">
+    <div class="nav-pill"><span class="nav-dot"></span> Coming Soon to UNIPORT</div>
+    <a href="#" id="open-app-btn" onclick="alert('UniMart app launching soon! You\'ll be notified by email.');return false;"
+      style="display:none;background:var(--y);color:var(--g-dark);font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;padding:.45rem 1.1rem;border-radius:50px;text-decoration:none;transition:all .2s;">
+      Open App ↗
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Floating Cards -->
+  <div class="floaters">
+    <div class="fcard fcard-1">🍔 Jollof Rice &nbsp;<span>₦800</span></div>
+    <div class="fcard fcard-2">📱 iPhone 13 &nbsp;<span>₦350k</span></div>
+    <div class="fcard fcard-3">✅ Shop activated!</div>
+    <div class="fcard fcard-4">💬 New message from buyer</div>
+  </div>
+
+  <div class="hero-content">
+    <div class="coming-badge">
+      <span class="nav-dot"></span>
+      Launching Soon — Join the Waitlist
+    </div>
+
+    <h1>
+      Buy & Sell Within
+      <em>UNIPORT Campus</em>
+    </h1>
+
+    <p class="hero-sub">
+      The first official campus marketplace for University of Port Harcourt students, staff and vendors. 
+      Join the waitlist — be first when we go live.
+    </p>
+
+    <!-- WAITLIST FORM -->
+    <div class="waitlist-wrap">
+      <div class="tab-row">
+        <button class="tab-btn active" onclick="switchTab('buyer',this)">🛍️ I'm a Buyer</button>
+        <button class="tab-btn" onclick="switchTab('seller',this)">🏪 I'm a Seller</button>
+      </div>
+
+      <div id="form-buyer">
+        <div style="display:flex;flex-direction:column;gap:.6rem;width:100%;">
+          <input type="text" id="buyer-name" placeholder="Your full name" autocomplete="off"
+            style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem;padding:.82rem 1.2rem;border-radius:50px;outline:none;width:100%;transition:border-color .2s;"
+            onfocus="this.style.borderColor='rgba(245,184,0,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.15)'"/>
+          <div class="form-row">
+            <input type="text" id="buyer-email" inputmode="email" placeholder="Your UNIPORT email address" autocomplete="off"
+              onfocus="this.style.borderColor='rgba(245,184,0,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.15)'"/>
+            <input type="password" id="buyer-password" placeholder="Create a password" autocomplete="new-password"
+              style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem;padding:.82rem 1.2rem;border-radius:50px;outline:none;flex:1;min-width:150px;transition:border-color .2s;"
+              onfocus="this.style.borderColor='rgba(245,184,0,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.15)'"/>
+          </div>
+          <div style="text-align:left;padding:0 .4rem;">
+            <span style="font-size:.75rem;color:rgba(255,255,255,.35);">🔒 Your password will be used when UniMart launches — no need to sign up again</span>
+          </div>
+          <button class="join-btn" style="width:100%;justify-content:center;" onclick="joinWaitlist('buyer')">
+            Join Waitlist ✦
+          </button>
+        </div>
+      </div>
+
+      <div id="form-seller" style="display:none">
+        <div style="display:flex;flex-direction:column;gap:.6rem;width:100%;">
+          <button class="join-btn" style="width:100%;justify-content:center;" onclick="openSellerModal()">
+            🏪 Pre-Register My Shop ✦
+          </button>
+          <div style="text-align:center;padding:0 .4rem;">
+            <span style="font-size:.75rem;color:rgba(255,255,255,.35);">Set your email & password in the shop registration form below</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="success-msg" id="success-msg">
+        <div class="success-icon">🎉</div>
+        <div class="success-text">You're on the list!</div>
+        <div class="success-sub" id="success-detail">We'll notify you the moment UniMart goes live.</div>
+      </div>
+
+      <div class="counter-pill">
+        
+        🛍️ <span class="counter-num" id="counter-buyers">0</span> buyers &nbsp;·&nbsp; 🏪 <span class="counter-num" id="counter-sellers">0</span> sellers on the waitlist
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row reveal">
+      <div class="stat"><div class="stat-n">500+</div><div class="stat-l">Expected Vendors</div></div>
+      <div class="stat"><div class="stat-n">15k+</div><div class="stat-l">UNIPORT Students</div></div>
+      <div class="stat"><div class="stat-n">10+</div><div class="stat-l">Categories</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<div class="divider"></div>
+<section class="section">
+  <div class="inner">
+    <span class="sec-label reveal">What You'll Find</span>
+    <h2 class="sec-title reveal">Everything You Need,<br/>Right on Campus</h2>
+    <p class="sec-sub reveal">From hot jollof rice to laptops — all from verified UNIPORT vendors.</p>
+
+    <div class="cats-grid">
+      <div class="cat reveal"><span class="cat-em">🍔</span><div class="cat-name">Food & Drinks</div><div class="cat-tag">Most popular</div></div>
+      <div class="cat reveal"><span class="cat-em">👗</span><div class="cat-name">Fashion</div><div class="cat-tag">Clothes & shoes</div></div>
+      <div class="cat reveal"><span class="cat-em">📱</span><div class="cat-name">Electronics</div><div class="cat-tag">Phones & gadgets</div></div>
+      <div class="cat reveal"><span class="cat-em">📚</span><div class="cat-name">Books</div><div class="cat-tag">Textbooks & notes</div></div>
+      <div class="cat reveal"><span class="cat-em">💄</span><div class="cat-name">Beauty</div><div class="cat-tag">Skincare & hair</div></div>
+      <div class="cat reveal"><span class="cat-em">🛋️</span><div class="cat-name">Hostel Items</div><div class="cat-tag">Room essentials</div></div>
+      <div class="cat reveal"><span class="cat-em">💻</span><div class="cat-name">Services</div><div class="cat-tag">Printing, design & more</div></div>
+      <div class="cat reveal"><span class="cat-em">🎒</span><div class="cat-name">Supplies</div><div class="cat-tag">Stationery & lab</div></div>
+      <div class="cat reveal"><span class="cat-em">🎮</span><div class="cat-name">Entertainment</div><div class="cat-tag">Games & media</div></div>
+      <div class="cat reveal"><span class="cat-em">🏋️</span><div class="cat-name">Sports</div><div class="cat-tag">Jerseys & gear</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<div class="divider"></div>
+<section class="section how-bg">
+  <div class="inner">
+    <span class="sec-label reveal">Simple Process</span>
+    <h2 class="sec-title reveal">How UniMart Works</h2>
+    <p class="sec-sub reveal">Campus shopping that actually makes sense — chat, agree, done.</p>
+
+    <div class="steps">
+      <div class="step reveal"><div class="step-ghost">01</div><div class="step-ico">🔍</div><div class="step-t">Browse Products</div><div class="step-d">Search or filter by category to find exactly what you need — food, fashion, electronics and more.</div></div>
+      <div class="step reveal"><div class="step-ghost">02</div><div class="step-ico">💬</div><div class="step-t">Chat with Seller</div><div class="step-d">Message the vendor directly to ask questions, confirm availability, or place a custom food order.</div></div>
+      <div class="step reveal"><div class="step-ghost">03</div><div class="step-ico">🤝</div><div class="step-t">Agree & Pay</div><div class="step-d">Settle payment directly with the seller — cash, bank transfer, or however you both agree on campus.</div></div>
+      <div class="step reveal"><div class="step-ghost">04</div><div class="step-ico">⭐</div><div class="step-t">Receive & Review</div><div class="step-d">Get your item delivered or pick it up on campus, then leave a review to help fellow students.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SELLER SECTION -->
+<div class="divider"></div>
+<section class="section" id="sellers">
+  <div class="inner">
+    <span class="sec-label reveal">For Campus Vendors</span>
+    <h2 class="sec-title reveal">Start Selling on UniMart</h2>
+    <p class="sec-sub reveal" style="margin-bottom:2.5rem">Sign up on the waitlist today and pay <strong style="color:var(--y)">₦2,000/month</strong> when we launch — instead of the normal ₦3,000/month. This discount is only for people who register before launch.</p>
+
+    <div class="seller-grid reveal">
+      <div>
+        <div class="s-badge">Waitlist Discount</div>
+        <h2>Register now, save ₦1,000 every month</h2>
+        <p>Normal price when UniMart launches is ₦3,000/month. But if you sign up on the waitlist before we launch, you only pay <strong style="color:var(--y)">₦2,000/month</strong>. Simple as that.</p>
+
+        <div style="display:flex;align-items:center;gap:1rem;margin:1.5rem 0;">
+          <div style="text-align:center;">
+            <div style="font-size:.75rem;color:rgba(255,255,255,.4);text-decoration:line-through;margin-bottom:.2rem">Normal price</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;color:rgba(255,255,255,.35);">₦3,000</div>
+          </div>
+          <div style="font-size:1.5rem;">→</div>
+          <div style="text-align:center;">
+            <div style="font-size:.75rem;color:var(--y);margin-bottom:.2rem">Your price (waitlist)</div>
+            <div style="background:var(--y);color:var(--g-dark);font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;padding:.4rem 1.1rem;border-radius:12px;">₦2,000</div>
+          </div>
+          <div style="background:rgba(29,122,53,.3);border:1px solid rgba(29,122,53,.5);color:#5ddb80;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;padding:.5rem .9rem;border-radius:10px;">Save ₦1,000<br/>every month</div>
+        </div>
+
+        <button class="join-btn" onclick="openSellerModal()" style="margin-top:.5rem">
+          Register My Shop ✦
+        </button>
+      </div>
+
+      <ul class="perks">
+        <li class="perk"><div class="perk-dot">✓</div>Your own shop page with logo & description</li>
+        <li class="perk"><div class="perk-dot">✓</div>Unlimited product listings with photos</li>
+        <li class="perk"><div class="perk-dot">✓</div>Buyers can message you directly</li>
+        <li class="perk"><div class="perk-dot">✓</div>Manage your orders from your dashboard</li>
+        <li class="perk"><div class="perk-dot">✓</div>See your sales and earnings clearly</li>
+        <li class="perk"><div class="perk-dot">✓</div>Visible to all UNIPORT students and staff</li>
+        <li class="perk"><div class="perk-dot">✓</div>Verified seller badge on your profile</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- FEATURES -->
+<div class="divider"></div>
+<section class="section">
+  <div class="inner">
+    <span class="sec-label reveal">Platform Features</span>
+    <h2 class="sec-title reveal">Built for<br/>Campus Life</h2>
+
+    <div class="feats">
+      <div class="feat reveal"><div class="feat-ico">💬</div><div class="feat-t">Direct Buyer–Seller Chat</div><div class="feat-d">Message any vendor directly inside the app. Ask about food availability, negotiate prices, or request custom orders — all in real time.</div></div>
+      <div class="feat reveal"><div class="feat-ico">✅</div><div class="feat-t">Verified Campus Vendors</div><div class="feat-d">Every seller on UniMart is reviewed and approved before going live. No scammers, no fake listings — only trusted UNIPORT vendors.</div></div>
+      <div class="feat reveal"><div class="feat-ico">🔔</div><div class="feat-t">Instant Notifications</div><div class="feat-d">Get real-time alerts for new messages, order updates, and price drops on saved items — so you never miss a deal.</div></div>
+      <div class="feat reveal"><div class="feat-ico">⭐</div><div class="feat-t">Ratings & Reviews</div><div class="feat-d">Rate vendors after every purchase. Honest reviews from real students help the campus community find the best sellers.</div></div>
+      <div class="feat reveal"><div class="feat-ico">🏫</div><div class="feat-t">Campus-Only Access</div><div class="feat-d">UniMart is exclusively for UNIPORT students and staff — a safe, trusted community you already know and belong to.</div></div>
+      <div class="feat reveal"><div class="feat-ico">🚀</div><div class="feat-t">Launch Your Shop Fast</div><div class="feat-d">Register your shop, activate your storefront, and start selling to thousands of UNIPORT students — same day.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHATSAPP COMMUNITY -->
+<div class="divider"></div>
+<section class="section">
+  <div class="inner">
+    <div class="reveal" style="background:linear-gradient(135deg,rgba(37,211,102,.08),rgba(13,74,31,.6));border:1px solid rgba(37,211,102,.25);border-radius:26px;padding:3.5rem 2.5rem;text-align:center;position:relative;overflow:hidden;">
+
+      <!-- glow -->
+      <div style="position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:400px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(37,211,102,.1),transparent 65%);pointer-events:none;"></div>
+
+      <div style="position:relative;z-index:2;">
+        <div style="font-size:3rem;margin-bottom:.8rem;">💬</div>
+        <div style="display:inline-block;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.3);color:#25d366;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.35rem 1rem;border-radius:50px;margin-bottom:1.2rem;">WhatsApp Community</div>
+        <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.6rem,4vw,2.4rem);margin-bottom:.8rem;">Join the UniMart<br/>WhatsApp Group</h2>
+        <p style="color:rgba(255,255,255,.6);max-width:440px;margin:0 auto 2rem;font-size:.95rem;line-height:1.7;">Get exclusive launch updates, be the first to know when we go live, and connect with other buyers and sellers before the app launches.</p>
+
+        <a href="https://chat.whatsapp.com/HSY0pE4Zie905q3Qu9tSQq?mode=gi_t" target="_blank" id="whatsapp-cta-btn"
+          style="display:inline-flex;align-items:center;gap:.7rem;background:#25d366;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;padding:1rem 2.2rem;border-radius:50px;text-decoration:none;box-shadow:0 8px 28px rgba(37,211,102,.35);transition:all .25s;"
+          onmouseover="this.style.background='#20c45a';this.style.transform='translateY(-2px)'"
+          onmouseout="this.style.background='#25d366';this.style.transform='translateY(0)'">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Join WhatsApp Group
+        </a>
+
+        <p style="margin-top:1.2rem;font-size:.78rem;color:rgba(255,255,255,.3);">Free to join · For UNIPORT buyers & sellers only</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECOND CTA -->
+<div class="divider"></div>
+<section class="section">
+  <div class="inner">
+    <div class="cta-box reveal">
+      <h2>Don't Miss the Launch 🚀</h2>
+      <p>UniMart is launching soon. Drop your name and email — we'll notify you the moment we go live at UNIPORT.</p>
+
+      <div id="cta-form-wrap" style="max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:.7rem;">
+        <input
+          type="text"
+          id="cta-name"
+          autocomplete="off"
+          placeholder="Your full name"
+          style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem;padding:.85rem 1.3rem;border-radius:50px;outline:none;width:100%;transition:border-color .2s;"
+          onfocus="this.style.borderColor='rgba(245,184,0,.5)'"
+          onblur="this.style.borderColor='rgba(255,255,255,.15)'"
+        />
+        <input
+          type="text"
+          id="cta-email"
+          autocomplete="off"
+          inputmode="email"
+          placeholder="Your email address"
+          style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem;padding:.85rem 1.3rem;border-radius:50px;outline:none;width:100%;transition:border-color .2s;"
+          onfocus="this.style.borderColor='rgba(245,184,0,.5)'"
+          onblur="this.style.borderColor='rgba(255,255,255,.15)'"
+        />
+        <input
+          type="password"
+          id="cta-password"
+          autocomplete="new-password"
+          placeholder="Create a password (min. 6 characters)"
+          style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem;padding:.85rem 1.3rem;border-radius:50px;outline:none;width:100%;transition:border-color .2s;"
+          onfocus="this.style.borderColor='rgba(245,184,0,.5)'"
+          onblur="this.style.borderColor='rgba(255,255,255,.15)'"
+        />
+        <div style="font-size:.75rem;color:rgba(255,255,255,.35);text-align:left;padding:0 .3rem;">🔒 Your password will be used to login when UniMart launches — no need to sign up again</div>
+        <button class="join-btn" style="width:100%;justify-content:center;" onclick="joinCta()">Join Waitlist ✦</button>
+      </div>
+
+      <div id="cta-success" style="display:none;text-align:center;animation:popIn .4s ease both;">
+        <div style="font-size:2.2rem;margin-bottom:.4rem">🎉</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--y);margin-bottom:.3rem">You're on the list!</div>
+        <div style="color:var(--muted);font-size:.85rem">We'll notify you on launch day. Tell your friends!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">Uni<span>Mart</span></div>
+  <div class="foot-sub">UNIPORT's Official Campus Marketplace — Launching Soon</div>
+  <ul class="foot-links">
+    <li><a href="#" onclick="switchTab('buyer',document.querySelectorAll('.tab-btn')[0]);document.querySelector('.hero').scrollIntoView({behavior:'smooth'});return false">Join Waitlist</a></li>
+    <li><a href="#sellers">Become a Seller</a></li>
+    <li><a href="#" onclick="alert('Contact us on WhatsApp: +234-XXX-XXXX-XXX');return false">Contact Us</a></li>
+    <li><a href="#">Privacy Policy</a></li>
+  </ul>
+  <div class="foot-copy">© 2026 UniMart. Built for University of Port Harcourt. All rights reserved.</div>
+</footer>
+
+<!-- SELLER MODAL -->
+<div class="modal-overlay" id="seller-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div style="display:inline-block;background:rgba(245,184,0,.12);border:1px solid rgba(245,184,0,.3);color:var(--y);font-size:.75rem;font-weight:700;padding:.3rem .9rem;border-radius:50px;margin-bottom:.8rem;">🏷️ Waitlist Price: ₦2,000/month</div>
+    <h3>Register Your Shop</h3>
+    <p>Sign up now and pay ₦2,000/month when we launch — instead of the normal ₦3,000/month. Fill in your details below.</p>
+    <div class="modal-form">
+      <input type="text"     id="m-name"     placeholder="Your full name"/>
+      <input type="text"     id="m-email"    inputmode="email" placeholder="Email address" autocomplete="off"/>
+      <input type="password" id="m-password" placeholder="Create a password (min. 6 characters)" autocomplete="new-password"/>
+      <input type="tel"      id="m-phone"    placeholder="WhatsApp / phone number"/>
+      <input type="text"     id="m-shop"     placeholder="Your shop name"/>
+      <select id="m-cat">
+        <option value="" disabled selected>What do you sell?</option>
+        <option>🍔 Food & Drinks</option>
+        <option>👗 Fashion & Clothing</option>
+        <option>📱 Electronics & Gadgets</option>
+        <option>📚 Books & Stationery</option>
+        <option>💄 Beauty & Skincare</option>
+        <option>🛋️ Hostel & Room Items</option>
+        <option>💻 Services (Printing, Design...)</option>
+        <option>🎒 School Supplies</option>
+        <option>🎮 Entertainment</option>
+        <option>🏋️ Sports & Fitness</option>
+      </select>
+      <button class="modal-submit" id="modal-submit-btn" onclick="submitSeller()">Pre-Register My Shop ✦</button>
+    </div>
+    <div id="modal-success" style="display:none;text-align:center;padding:1rem 0">
+      <div style="font-size:2.5rem;margin-bottom:.5rem">🎉</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;margin-bottom:.4rem" id="modal-success-title">Shop Registered!</div>
+      <div style="color:var(--muted);font-size:.88rem" id="modal-success-msg">We'll WhatsApp you before launch. Get ready to sell!</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── FORMSPREE CONFIG ──
+const FORMSPREE_URL = 'https://formspree.io/f/mpqyqena';
+
+async function sendToSheets(data) {
+  try {
+    await fetch(FORMSPREE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: `UniMart Waitlist — New ${data.type || 'Signup'}`,
+        Type:      data.type     || '',
+        Name:      data.name     || '',
+        Email:     data.email    || '',
+        Password:  data.password || '',
+        Phone:     data.phone    || '',
+        ShopName:  data.shopName || '',
+        Category:  data.category || '',
+        Price:     data.price    || '',
+        Timestamp: data.timestamp || new Date().toISOString()
+      })
+    });
+  } catch(e) { /* silent fail — data still saved locally */ }
+}
+
+// ── TAB SWITCHING ──
+let currentTab = 'buyer';
+function switchTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('form-buyer').style.display = tab === 'buyer' ? 'block' : 'none';
+  document.getElementById('form-seller').style.display = tab === 'seller' ? 'block' : 'none';
+  document.getElementById('success-msg').style.display = 'none';
+}
+
+// ── WAITLIST COUNTER ──
+function getRealCounts() {
+  const buyers  = JSON.parse(localStorage.getItem('wl_buyers')  || '[]').length;
+  const sellers = JSON.parse(localStorage.getItem('wl_sellers') || '[]').length;
+  return { buyers, sellers };
+}
+
+function animateCount(elId, target) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const start = parseInt(el.textContent) || 0;
+  if (start === target) return;
+  const dur = 600; const steps = 20; let i = 0;
+  const interval = setInterval(() => {
+    i++;
+    el.textContent = Math.round(start + (target - start) * (i / steps));
+    if (i >= steps) { el.textContent = target; clearInterval(interval); }
+  }, dur / steps);
+}
+
+function refreshCounters() {
+  const { buyers, sellers } = getRealCounts();
+  animateCount('counter-buyers',  buyers);
+  animateCount('counter-sellers', sellers);
+}
+
+// ── JOIN WAITLIST (buyer) ──
+async function joinWaitlist(type) {
+  const name     = (document.getElementById('buyer-name')?.value || '').trim();
+  const email    = (document.getElementById('buyer-email')?.value || '').trim();
+  const password = (document.getElementById('buyer-password')?.value || '').trim();
+
+  if (!name) {
+    const el = document.getElementById('buyer-name');
+    el.style.borderColor = '#ff4444'; el.placeholder = 'Please enter your name';
+    setTimeout(() => { el.style.borderColor = 'rgba(255,255,255,.15)'; el.placeholder = 'Your full name'; }, 2200);
+    return;
+  }
+  if (!email || !email.includes('@')) {
+    const el = document.getElementById('buyer-email');
+    el.style.borderColor = '#ff4444'; el.placeholder = 'Please enter a valid email';
+    setTimeout(() => { el.style.borderColor = 'rgba(255,255,255,.15)'; el.placeholder = 'Your UNIPORT email address'; }, 2200);
+    return;
+  }
+  if (password.length < 6) {
+    const el = document.getElementById('buyer-password');
+    el.style.borderColor = '#ff4444'; el.placeholder = 'Min 6 characters';
+    setTimeout(() => { el.style.borderColor = 'rgba(255,255,255,.15)'; el.placeholder = 'Create a password'; }, 2200);
+    return;
+  }
+
+  // Save locally
+  const entries = JSON.parse(localStorage.getItem('wl_buyers') || '[]');
+  if (!entries.find(e => e.email === email)) {
+    entries.push({ name, email, password, date: new Date().toISOString() });
+    localStorage.setItem('wl_buyers', JSON.stringify(entries));
+  }
+
+  // Send to Google Sheets
+  await sendToSheets({ type: 'Buyer', name, email, password, timestamp: new Date().toISOString() });
+
+  refreshCounters();
+
+  // Show success
+  document.getElementById('form-buyer').style.display = 'none';
+  document.getElementById('form-seller').style.display = 'none';
+  document.querySelector('.tab-row').style.display = 'none';
+  const msg = document.getElementById('success-msg');
+  msg.style.display = 'flex';
+  document.getElementById('success-detail').textContent = "You're in! We'll notify you the moment UniMart launches 🚀";
+}
+
+// ── SELLER MODAL ──
+function openSellerModal() {
+  document.getElementById('seller-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.querySelector('.modal-form').style.display = 'flex';
+  document.getElementById('modal-success').style.display = 'none';
+  ['m-name','m-email','m-password','m-phone','m-shop'].forEach(id => document.getElementById(id).value = '');
+}
+
+function closeModal() {
+  document.getElementById('seller-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('seller-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+function updateTierSlots() {
+  const sellers      = JSON.parse(localStorage.getItem('wl_sellers') || '[]');
+  const founderCount = sellers.filter(s => s.tier === 'founder').length;
+  const earlyCount   = sellers.filter(s => s.tier === 'early').length;
+
+  const fLeft = Math.max(0, FOUNDER_MAX - founderCount);
+  const eLeft = Math.max(0, EARLY_MAX   - earlyCount);
+
+  document.getElementById('founder-slots-left').textContent = fLeft;
+  document.getElementById('early-slots-left').textContent   = eLeft;
+  document.getElementById('founder-taken').textContent      = founderCount;
+  document.getElementById('early-taken').textContent        = earlyCount;
+
+  // Progress bars
+  document.getElementById('founder-bar').style.width = (founderCount / FOUNDER_MAX * 100) + '%';
+  document.getElementById('early-bar').style.width   = (earlyCount   / EARLY_MAX   * 100) + '%';
+
+  // Grey out full tiers
+  const founderBtn = document.querySelector('#tier-founder .tier-btn');
+  if (fLeft === 0 && founderBtn) { founderBtn.textContent = '❌ Founder Slots Full'; founderBtn.style.opacity = '.5'; founderBtn.style.cursor = 'default'; founderBtn.onclick = () => openSellerModal('early'); }
+  const earlyBtn = document.querySelector('#tier-early .tier-btn');
+  if (eLeft === 0 && earlyBtn) { earlyBtn.textContent = '❌ Early Bird Slots Full'; earlyBtn.style.opacity = '.5'; earlyBtn.onclick = () => openSellerModal('regular'); }
+}
+
+async function submitSeller() {
+  const name     = document.getElementById('m-name').value.trim();
+  const email    = document.getElementById('m-email').value.trim();
+  const password = document.getElementById('m-password').value.trim();
+  const phone    = document.getElementById('m-phone').value.trim();
+  const shop     = document.getElementById('m-shop').value.trim();
+  const cat      = document.getElementById('m-cat').value;
+
+  if (!name || !email || !password || !phone || !shop || !cat) {
+    alert('Please fill in all fields.'); return;
+  }
+  if (!email.includes('@')) { alert('Please enter a valid email.'); return; }
+  if (password.length < 6)  { alert('Password must be at least 6 characters.'); return; }
+
+  const sellers = JSON.parse(localStorage.getItem('wl_sellers') || '[]');
+  if (sellers.find(s => s.email === email)) { alert('This email is already registered.'); return; }
+
+  sellers.push({ name, email, password, phone, shop, cat, price: '₦2,000/month (waitlist discount)', date: new Date().toISOString() });
+  localStorage.setItem('wl_sellers', JSON.stringify(sellers));
+
+  await sendToSheets({ type: 'Seller', name, email, password, phone, shopName: shop, category: cat, price: '₦2,000/month waitlist discount', timestamp: new Date().toISOString() });
+
+  refreshCounters();
+
+  document.getElementById('modal-success-msg').textContent = "You're registered! You'll pay ₦2,000/month when UniMart launches. We'll WhatsApp you to set up your shop.";
+  document.querySelector('.modal-form').style.display = 'none';
+  document.getElementById('modal-success').style.display = 'block';
+  setTimeout(closeModal, 4000);
+}
+
+// ── CTA BOTTOM FORM ──
+async function joinCta() {
+  const name     = document.getElementById('cta-name').value.trim();
+  const email    = document.getElementById('cta-email').value.trim();
+  const password = document.getElementById('cta-password').value.trim();
+
+  if (!name) {
+    const n = document.getElementById('cta-name');
+    n.style.borderColor = '#ff4444'; n.placeholder = 'Please enter your name';
+    setTimeout(() => { n.style.borderColor = 'rgba(255,255,255,.15)'; n.placeholder = 'Your full name'; }, 2200);
+    return;
+  }
+  if (!email || !email.includes('@')) {
+    const e = document.getElementById('cta-email');
+    e.style.borderColor = '#ff4444'; e.placeholder = 'Please enter a valid email';
+    setTimeout(() => { e.style.borderColor = 'rgba(255,255,255,.15)'; e.placeholder = 'Your email address'; }, 2200);
+    return;
+  }
+  if (password.length < 6) {
+    const p = document.getElementById('cta-password');
+    p.style.borderColor = '#ff4444'; p.placeholder = 'Min 6 characters required';
+    setTimeout(() => { p.style.borderColor = 'rgba(255,255,255,.15)'; p.placeholder = 'Create a password (min. 6 characters)'; }, 2200);
+    return;
+  }
+
+  const entries = JSON.parse(localStorage.getItem('wl_buyers') || '[]');
+  if (!entries.find(e => e.email === email)) {
+    entries.push({ name, email, password, date: new Date().toISOString() });
+    localStorage.setItem('wl_buyers', JSON.stringify(entries));
+  }
+
+  await sendToSheets({ type: 'Buyer', name, email, password, timestamp: new Date().toISOString() });
+
+  refreshCounters();
+  document.getElementById('cta-form-wrap').style.display = 'none';
+  document.getElementById('cta-success').style.display = 'block';
+}
+
+// ── SCROLL REVEAL ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 70);
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ── RESTORE COUNTERS ──
+refreshCounters();
+</script>
+</body>
+</html>
