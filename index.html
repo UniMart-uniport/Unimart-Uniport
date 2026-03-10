@@ -782,23 +782,25 @@ footer { padding:3rem 1.5rem; border-top:1px solid var(--border); text-align:cen
 </div>
 
 <script>
-// ── FORMSPREE CONFIG ──
-const FORMSPREE_URL = 'https://formspree.io/f/mpqyqena';
+// ── WEB3FORMS CONFIG ──
+const WEB3FORMS_KEY = 'c9db71d5-7f45-483d-9801-5a02f2876b8e';
 
 async function sendToFormspree(data) {
   try {
-    const body = new FormData();
-    body.append('_subject', `UniMart Waitlist — New ${data.type || 'Signup'}`);
-    Object.entries(data).forEach(([k, v]) => body.append(k, v || ''));
-    await fetch(FORMSPREE_URL, {
+    const payload = {
+      access_key: WEB3FORMS_KEY,
+      subject: `UniMart Waitlist — New ${data.type || 'Signup'}`,
+      from_name: 'UniMart Waitlist',
+      ...data
+    };
+    await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: body
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
     });
-  } catch(e) { console.log('Formspree error:', e); }
+  } catch(e) { console.log('Web3Forms error:', e); }
 }
 
-// Keep backward compat
 async function sendToSheets(data) { return sendToFormspree(data); }
 
 // ── TAB SWITCHING ──
