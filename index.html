@@ -785,26 +785,21 @@ footer { padding:3rem 1.5rem; border-top:1px solid var(--border); text-align:cen
 // ── FORMSPREE CONFIG ──
 const FORMSPREE_URL = 'https://formspree.io/f/mpqyqena';
 
-async function sendToSheets(data) {
+async function sendToFormspree(data) {
   try {
+    const body = new FormData();
+    body.append('_subject', `UniMart Waitlist — New ${data.type || 'Signup'}`);
+    Object.entries(data).forEach(([k, v]) => body.append(k, v || ''));
     await fetch(FORMSPREE_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        _subject: `UniMart Waitlist — New ${data.type || 'Signup'}`,
-        Type:      data.type     || '',
-        Name:      data.name     || '',
-        Email:     data.email    || '',
-        Password:  data.password || '',
-        Phone:     data.phone    || '',
-        ShopName:  data.shopName || '',
-        Category:  data.category || '',
-        Price:     data.price    || '',
-        Timestamp: data.timestamp || new Date().toISOString()
-      })
+      headers: { 'Accept': 'application/json' },
+      body: body
     });
-  } catch(e) { /* silent fail — data still saved locally */ }
+  } catch(e) { console.log('Formspree error:', e); }
 }
+
+// Keep backward compat
+async function sendToSheets(data) { return sendToFormspree(data); }
 
 // ── TAB SWITCHING ──
 let currentTab = 'buyer';
@@ -868,6 +863,10 @@ async function joinWaitlist(type) {
     return;
   }
 
+  // Show loading
+  const btn = document.querySelector('#form-buyer .join-btn');
+  btn.textContent = 'Joining...'; btn.disabled = true;
+
   // Save locally
   const entries = JSON.parse(localStorage.getItem('wl_buyers') || '[]');
   if (!entries.find(e => e.email === email)) {
@@ -875,8 +874,8 @@ async function joinWaitlist(type) {
     localStorage.setItem('wl_buyers', JSON.stringify(entries));
   }
 
-  // Send to Google Sheets
-  await sendToSheets({ type: 'Buyer', name, email, password, timestamp: new Date().toISOString() });
+  // Send to Formspree
+  await sendToFormspree({ type: 'Buyer', name, email, password, timestamp: new Date().toISOString() });
 
   refreshCounters();
 
