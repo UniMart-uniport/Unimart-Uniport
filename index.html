@@ -439,6 +439,40 @@ footer { padding:3rem 1.5rem; border-top:1px solid var(--border); text-align:cen
 .tier-btn-gold:hover { background:var(--y-light); transform:translateY(-2px); }
 .modal-tier-badge { display:inline-flex; align-items:center; gap:.5rem; padding:.4rem 1rem; border-radius:50px; font-size:.8rem; font-weight:700; margin-bottom:.8rem; }
 
+
+/* VIDEO SECTION */
+.video-section { padding:5rem 1.5rem; background:var(--surface); text-align:center; }
+.video-section .sec-label { display:inline-block; background:rgba(15,107,47,.15); color:var(--g); font-size:.72rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:.35rem 1rem; border-radius:50px; margin-bottom:1rem; }
+.video-section .sec-title { font-family:'Syne',sans-serif; font-size:clamp(1.6rem,4vw,2.4rem); font-weight:800; color:#fff; margin-bottom:.6rem; }
+.video-section .sec-sub { color:var(--muted); font-size:.95rem; max-width:520px; margin:0 auto 2.5rem; line-height:1.7; }
+.video-wrap {
+  position:relative; max-width:780px; margin:0 auto;
+  border-radius:20px; overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.4), 0 0 0 3px var(--g);
+}
+.video-placeholder {
+  width:100%; aspect-ratio:16/9;
+  background:linear-gradient(135deg,#0a3d1a,#1d7a35);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  cursor:pointer; gap:1rem; transition:opacity .2s;
+}
+.video-placeholder:hover { opacity:.92; }
+.video-play-btn {
+  width:76px; height:76px; background:var(--y);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:28px; padding-left:5px;
+  box-shadow:0 8px 32px rgba(245,184,0,.5);
+  transition:transform .2s, box-shadow .2s;
+}
+.video-placeholder:hover .video-play-btn { transform:scale(1.1); box-shadow:0 12px 40px rgba(245,184,0,.7); }
+.video-play-label { color:#fff; font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; }
+.video-play-sub { color:rgba(255,255,255,.6); font-size:.82rem; }
+.video-steps { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:2.5rem; max-width:780px; margin-left:auto; margin-right:auto; }
+.v-step { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:1.2rem 1.4rem; flex:1; min-width:200px; text-align:left; }
+.v-step-num { width:28px; height:28px; background:var(--g); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.8rem; margin-bottom:.8rem; }
+.v-step h4 { font-family:'Syne',sans-serif; font-size:.95rem; font-weight:700; color:#fff; margin-bottom:.4rem; }
+.v-step p { font-size:.82rem; color:var(--muted); margin:0; line-height:1.6; }
+
 </style>
 </head>
 <body>
@@ -595,25 +629,31 @@ footer { padding:3rem 1.5rem; border-top:1px solid var(--border); text-align:cen
   <div class="inner">
     <span class="sec-label reveal">For Campus Vendors</span>
     <h2 class="sec-title reveal">Start Selling on UniMart</h2>
-    <p class="sec-sub reveal" style="margin-bottom:2.5rem">Sign up on the waitlist today and pay <strong style="color:var(--y)">₦2,000/month</strong> when we launch — instead of the normal ₦3,000/month. This discount is only for people who register before launch.</p>
+    <p class="sec-sub reveal" style="margin-bottom:2.5rem">Join the waitlist today and be among the first vendors to open a shop when UniMart UNIPORT launches. Founding sellers get exclusive early access and their shop goes live before the platform opens to everyone.</p>
 
     <div class="seller-grid reveal">
       <div>
-        <div class="s-badge">Waitlist Discount</div>
-        <h2>Register now, save ₦1,000 every month</h2>
-        <p>Normal price when UniMart launches is ₦3,000/month. But if you sign up on the waitlist before we launch, you only pay <strong style="color:var(--y)">₦2,000/month</strong>. Simple as that.</p>
+        <div class="s-badge">Founding Sellers Only</div>
+        <h2>Get your shop ready before everyone else</h2>
+        <p>UniMart UNIPORT is launching soon at University of Port Harcourt. Vendors who register on the waitlist now get first access — your shop is set up and ready the moment we go live.</p>
 
-        <div style="display:flex;align-items:center;gap:1rem;margin:1.5rem 0;">
-          <div style="text-align:center;">
-            <div style="font-size:.75rem;color:rgba(255,255,255,.4);text-decoration:line-through;margin-bottom:.2rem">Normal price</div>
-            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;color:rgba(255,255,255,.35);">₦3,000</div>
+        <div style="display:flex;flex-direction:column;gap:.8rem;margin:1.5rem 0;">
+          <div style="display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.06);border-radius:12px;padding:.8rem 1rem;">
+            <span style="font-size:1.3rem;">🏪</span>
+            <span style="font-size:.95rem;color:rgba(255,255,255,.85);">Your own professional shop page on campus</span>
           </div>
-          <div style="font-size:1.5rem;">→</div>
-          <div style="text-align:center;">
-            <div style="font-size:.75rem;color:var(--y);margin-bottom:.2rem">Your price (waitlist)</div>
-            <div style="background:var(--y);color:var(--g-dark);font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;padding:.4rem 1.1rem;border-radius:12px;">₦2,000</div>
+          <div style="display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.06);border-radius:12px;padding:.8rem 1rem;">
+            <span style="font-size:1.3rem;">📦</span>
+            <span style="font-size:.95rem;color:rgba(255,255,255,.85);">List unlimited products with photos and prices</span>
           </div>
-          <div style="background:rgba(29,122,53,.3);border:1px solid rgba(29,122,53,.5);color:#5ddb80;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;padding:.5rem .9rem;border-radius:10px;">Save ₦1,000<br/>every month</div>
+          <div style="display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.06);border-radius:12px;padding:.8rem 1rem;">
+            <span style="font-size:1.3rem;">💬</span>
+            <span style="font-size:.95rem;color:rgba(255,255,255,.85);">Buyers message you directly through the platform</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.06);border-radius:12px;padding:.8rem 1rem;">
+            <span style="font-size:1.3rem;">🎓</span>
+            <span style="font-size:.95rem;color:rgba(255,255,255,.85);">Visible to every student and staff at UNIPORT</span>
+          </div>
         </div>
 
         <button class="join-btn" onclick="openSellerModal()" style="margin-top:.5rem">
@@ -622,7 +662,7 @@ footer { padding:3rem 1.5rem; border-top:1px solid var(--border); text-align:cen
       </div>
 
       <ul class="perks">
-        <li class="perk"><div class="perk-dot">✓</div>Your own shop page with logo & description</li>
+        <li class="perk"><div class="perk-dot">✓</div>Your own shop page with logo &amp; description</li>
         <li class="perk"><div class="perk-dot">✓</div>Unlimited product listings with photos</li>
         <li class="perk"><div class="perk-dot">✓</div>Buyers can message you directly</li>
         <li class="perk"><div class="perk-dot">✓</div>Manage your orders from your dashboard</li>
@@ -634,6 +674,42 @@ footer { padding:3rem 1.5rem; border-top:1px solid var(--border); text-align:cen
   </div>
 </section>
 
+
+<!-- VIDEO SECTION -->
+<div class="divider"></div>
+<section class="video-section">
+  <div class="inner">
+    <span class="sec-label reveal">🎬 See It In Action</span>
+    <h2 class="sec-title reveal">Watch How UniMart UNIPORT Works</h2>
+    <p class="sec-sub reveal">See how students and vendors buy, sell, and connect on UNIPORT's campus marketplace — in under 2 minutes.</p>
+
+    <div class="video-wrap reveal" id="videoWrapper">
+      <div class="video-placeholder" onclick="loadVideo()" id="videoPlaceholder">
+        <div class="video-play-btn">▶</div>
+        <div class="video-play-label">Watch the UniMart Demo</div>
+        <div class="video-play-sub">2 min · See exactly how it works</div>
+      </div>
+    </div>
+
+    <div class="video-steps">
+      <div class="v-step reveal">
+        <div class="v-step-num">1</div>
+        <h4>Sellers List Products</h4>
+        <p>Campus vendors create a professional storefront and list products with photos in minutes.</p>
+      </div>
+      <div class="v-step reveal">
+        <div class="v-step-num">2</div>
+        <h4>Buyers Browse & Search</h4>
+        <p>Students search by category and find exactly what they need from verified campus sellers.</p>
+      </div>
+      <div class="v-step reveal">
+        <div class="v-step-num">3</div>
+        <h4>Message, Meet & Done</h4>
+        <p>Buyers message sellers directly on the platform. Meet on campus, pay, and complete the deal.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- FEATURES -->
 <div class="divider"></div>
@@ -749,9 +825,9 @@ footer { padding:3rem 1.5rem; border-top:1px solid var(--border); text-align:cen
 <div class="modal-overlay" id="seller-modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <div style="display:inline-block;background:rgba(245,184,0,.12);border:1px solid rgba(245,184,0,.3);color:var(--y);font-size:.75rem;font-weight:700;padding:.3rem .9rem;border-radius:50px;margin-bottom:.8rem;">🏷️ Waitlist Price: ₦2,000/month</div>
+    <div style="display:inline-block;background:rgba(245,184,0,.12);border:1px solid rgba(245,184,0,.3);color:var(--y);font-size:.75rem;font-weight:700;padding:.3rem .9rem;border-radius:50px;margin-bottom:.8rem;">🏪 Founding Seller Registration</div>
     <h3>Register Your Shop</h3>
-    <p>Sign up now and pay ₦2,000/month when we launch — instead of the normal ₦3,000/month. Fill in your details below.</p>
+    <p>Join the waitlist as a founding seller. You get early access and your shop goes live before UniMart opens to everyone.</p>
     <div class="modal-form">
       <input type="text"     id="m-name"     placeholder="Your full name"/>
       <input type="text"     id="m-email"    inputmode="email" placeholder="Email address" autocomplete="off"/>
@@ -948,14 +1024,14 @@ async function submitSeller() {
   const sellers = JSON.parse(localStorage.getItem('wl_sellers') || '[]');
   if (sellers.find(s => s.email === email)) { alert('This email is already registered.'); return; }
 
-  sellers.push({ name, email, password, phone, shop, cat, price: '₦2,000/month (waitlist discount)', date: new Date().toISOString() });
+  sellers.push({ name, email, password, phone, shop, cat, role: 'founding-seller', date: new Date().toISOString() });
   localStorage.setItem('wl_sellers', JSON.stringify(sellers));
 
-  await sendToSheets({ type: 'Seller', name, email, password, phone, shopName: shop, category: cat, price: '₦2,000/month waitlist discount', timestamp: new Date().toISOString() });
+  await sendToSheets({ type: 'Seller', name, email, password, phone, shopName: shop, category: cat, role: 'founding-seller', timestamp: new Date().toISOString() });
 
   refreshCounters();
 
-  document.getElementById('modal-success-msg').textContent = "You're registered! You'll pay ₦2,000/month when UniMart launches. We'll WhatsApp you to set up your shop.";
+  document.getElementById('modal-success-msg').textContent = "You're registered as a founding seller! We'll WhatsApp you before launch to set up your shop.";
   document.querySelector('.modal-form').style.display = 'none';
   document.getElementById('modal-success').style.display = 'block';
   setTimeout(closeModal, 4000);
@@ -1009,6 +1085,30 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
 // ── RESTORE COUNTERS ──
 refreshCounters();
+
+// ── VIDEO LOADER ─────────────────────────────────────────
+// Replace YOUR_YOUTUBE_VIDEO_ID with your real YouTube video ID after uploading
+// e.g. if your link is youtube.com/watch?v=abc123 then use: abc123
+const YOUTUBE_ID = 'I457tRVvePM';
+
+function loadVideo() {
+  var wrapper = document.getElementById('videoWrapper');
+  if (YOUTUBE_ID === 'YOUR_YOUTUBE_VIDEO_ID') {
+    document.getElementById('videoPlaceholder').innerHTML =
+      '<div style="padding:3rem;color:#fff;text-align:center;">' +
+        '<div style="font-size:3rem;margin-bottom:1rem;">&#127916;</div>' +
+        '<div style="font-family:Syne,sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:.5rem;">Video Coming Soon</div>' +
+        '<div style="font-size:.85rem;opacity:.65;">We are finishing our explainer video. Check back after launch!</div>' +
+      '</div>';
+    return;
+  }
+  wrapper.innerHTML =
+    '<iframe src="https://www.youtube.com/embed/' + YOUTUBE_ID + '?autoplay=1&rel=0&modestbranding=1"' +
+    ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"' +
+    ' allowfullscreen' +
+    ' style="width:100%;aspect-ratio:16/9;display:block;border:none;"></iframe>';
+}
+
 </script>
 </body>
 </html>
